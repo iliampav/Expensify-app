@@ -60,5 +60,8 @@
   },
   "devDependencies": {
     "webpack-cli": "^4.5.0"
+  },
+  "engines": {
+    "node": "^14.15.0" 
   }
 }
