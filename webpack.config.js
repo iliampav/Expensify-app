@@ -1,29 +1,54 @@
-const path = require('path')
+const path = require('path');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
-module.exports = {
-    mode: 'development',
-    entry: './src/app.js',
-    output: {
-        path: path.join(__dirname, 'public'),
-        filename: 'bundle.js'
-    },
-    module: {
-        rules: [{
-            loader: 'babel-loader',
-            test: /\.js$/,
-            exclude:/node_modules/
-        },{
-            test:/\.s?css$/,
-            use: [
-                'style-loader',
-                'css-loader',
-                'sass-loader'
-            ]
-        }]
-    },
-    devtool: 'eval-cheap-module-source-map',
-    devServer: {
-        contentBase: path.join(__dirname, 'public'),
-        historyApiFallback: true
-    }
+module.exports = (env, argv) => {
+    const isProduction = argv.mode === 'production';
+
+    return {
+        mode: 'development',
+        entry: './src/app.js',
+        output: {
+            path: path.join(__dirname, 'public'),
+            filename: 'bundle.js'
+        },
+        module: {
+            rules: [{
+                test: /\.js$/,
+                exclude:/node_modules/,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                      presets: ['@babel/preset-env', '@babel/preset-react'],
+                      plugins: ['@babel/plugin-proposal-class-properties'],
+                    },
+                  },                
+            },{
+                test:/\.s?css$/,
+                use: [
+                    {
+                      loader: MiniCssExtractPlugin.loader,
+                      options: {
+                        publicPath: (resourcePath, context) => {
+                          return (
+                            path.relative(path.dirname(resourcePath), context) + '/'
+                          );
+                        },
+                      },
+                    },
+                    'css-loader',
+                    'sass-loader',
+                ],
+            }]
+        },
+        plugins:[
+            new MiniCssExtractPlugin({
+              filename: 'style.css',
+            }),
+          ],
+        devtool: isProduction ? 'source-map' : 'inline-source-map',
+        devServer: {
+            contentBase: path.join(__dirname, 'public'),
+            historyApiFallback: true
+        }
+    };
 };
