@@ -41,17 +41,28 @@ module.exports = (env, argv) => {
                           return (
                             path.relative(path.dirname(resourcePath), context) + '/'
                           );
-                        },
-                      },
+                        }
+                      }
                     },
                     'css-loader',
-                    'sass-loader',
-                ],
-            }]
+                    'sass-loader'                  
+                ]
+            }, {
+              test: /\.jpg$/i,
+              use: [
+                {
+                  loader: 'url-loader',
+                  options: {
+                    encoding: false,
+                  },
+                },
+              ],
+            }     
+          ]
         },
         plugins:[
             new MiniCssExtractPlugin({
-              filename: 'style.css',
+              filename: 'style.css',              
             }),
             new webpack.DefinePlugin({
               'process.env.FIREBASE_API_KEY': JSON.stringify(process.env.FIREBASE_API_KEY),
