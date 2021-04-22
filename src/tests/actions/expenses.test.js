@@ -4,14 +4,16 @@ import { startAddExpense, addExpense, editExpense, removeExpense, setExpenses, s
 import expenses from '../fixtures/expenses';
 import database from '../../firebase/firebase';
 
-const createMockStore = configureMockStore([thunk])
+const uid = 'thisismytestuid';
+const defaultAuthState =  {auth: { uid }};
+const createMockStore = configureMockStore([thunk]);
 
 beforeEach((done) => {
     const expensesData  = {};
     expenses.forEach(({id, description, note, amount, createdAt}) => {
         expensesData [id] = { description, note, amount, createdAt}
     });
-    database.ref('expenses').set(expensesData).then(() => done())
+    database.ref(`users/${uid}/expenses`).set(expensesData).then(() => done())
 });
 
 test('should setup remove expense', () => {
@@ -23,7 +25,7 @@ test('should setup remove expense', () => {
 })
 
 test('Should remove expense from the firebase', (done) => {
-    const store = createMockStore({});
+    const store = createMockStore(defaultAuthState);
     const id = expenses[1].id;
     store.dispatch(startRemoveExpense({ id })).then(() => {
         const action = store.getActions();
@@ -31,7 +33,7 @@ test('Should remove expense from the firebase', (done) => {
             type: 'REMOVE_EXPENSE',
             id
         });
-        return database.ref(`expenses/${id}`).once('value')        
+        return database.ref(`users/${uid}/expenses/${id}`).once('value')        
     }).then((snapshot) => {
         expect(snapshot.val()).toBeFalsy();
         done();
@@ -50,7 +52,7 @@ test('Should Edit expense page', () => {
 })
 
 test('Should edit expensepage from firebase', (done) => {
-    const store = createMockStore({});
+    const store = createMockStore(defaultAuthState);
     const id = expenses[1].id;
     const updates = { note: 'New note value' }
     store.dispatch(startEditExpense(id, updates)).then(() => {
@@ -60,7 +62,7 @@ test('Should edit expensepage from firebase', (done) => {
             id,
             updates
         });
-        return database.ref(`expenses/${id}`).once('value')
+        return database.ref(`users/${uid}/expenses/${id}`).once('value')
     }).then((snapshot) => {
         expect(snapshot.val().note).toBe(updates.note);
         done()
@@ -76,7 +78,7 @@ test('Should setUp add expense action object with provided values', () => {
 });
 
 test('Should add expense to database and store', (done) => {
-    const store = createMockStore({})
+    const store = createMockStore(defaultAuthState)
     const expenseData = {
         description: 'mouse',
         amount: 3000,
@@ -94,7 +96,7 @@ test('Should add expense to database and store', (done) => {
             }
         });
 
-        return database.ref(`expenses/${actions[0].expense.id}`).once('value')        
+        return database.ref(`users/${uid}/expenses/${actions[0].expense.id}`).once('value')        
     }).then((snapshot) => {
         expect(snapshot.val()).toEqual(expenseData);
         done();
@@ -102,7 +104,7 @@ test('Should add expense to database and store', (done) => {
 });
 
 test('Should add default expense to database and store', (done) => {
-    const store = createMockStore({})
+    const store = createMockStore(defaultAuthState)
     const expenseDefault = {
         description: '',
             note: '',
@@ -120,7 +122,7 @@ test('Should add default expense to database and store', (done) => {
             }
         });
 
-        return database.ref(`expenses/${actions[0].expense.id}`).once('value')        
+        return database.ref(`users/${uid}/expenses/${actions[0].expense.id}`).once('value')        
     }).then((snapshot) => {
         expect(snapshot.val()).toEqual(expenseDefault);
         done();
@@ -136,7 +138,7 @@ test('Should Set up set expense action with data', () => {
 });
 
 test('Should fetch the expenses from firebase', (done) => {
-    const store = createMockStore({});
+    const store = createMockStore(defaultAuthState);
     store.dispatch(startSetExpenses()).then(() => {
         const action = store.getActions();
         expect(action[0]).toEqual({
