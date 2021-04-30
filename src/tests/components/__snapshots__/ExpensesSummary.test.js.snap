@@ -1,0 +1,71 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Should correctly render expenses Sumary with multiple expense 1`] = `
+<div
+  className="page-header"
+>
+  <div
+    className="content_container"
+  >
+    <h1
+      className="page-header__title"
+    >
+      Viewing 
+      <span>
+        23
+      </span>
+       
+      expenses
+       totalling 
+      <span>
+        32,545,775.42
+      </span>
+    </h1>
+    <div
+      className="page-header__actions"
+    >
+      <Link
+        className="button"
+        to="/create"
+      >
+        Add Expense
+      </Link>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Should correctly render expenses Sumary with one expense 1`] = `
+<div
+  className="page-header"
+>
+  <div
+    className="content_container"
+  >
+    <h1
+      className="page-header__title"
+    >
+      Viewing 
+      <span>
+        1
+      </span>
+       
+      expense
+       totalling 
+      <span>
+        3.25
+      </span>
+    </h1>
+    <div
+      className="page-header__actions"
+    >
+      <Link
+        className="button"
+        to="/create"
+      >
+        Add Expense
+      </Link>
+    </div>
+  </div>
+</div>
+`;

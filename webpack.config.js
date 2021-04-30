@@ -41,8 +41,7 @@ module.exports = (env, argv) => {
                           return (
                             path.relative(path.dirname(resourcePath), context) + '/'
                           );
-                        },
-                        publicPath: './public/images'
+                        }
                       }
                     },
                     'css-loader',
@@ -54,7 +53,7 @@ module.exports = (env, argv) => {
                 {
                   loader: 'css-loader',
                   options: {
-                      url: true
+                      url: false
                   }
                 },
                 'scss-loader'

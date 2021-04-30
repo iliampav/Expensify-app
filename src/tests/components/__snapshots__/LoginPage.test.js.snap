@@ -10,10 +10,10 @@ exports[`Should correctly render Loguinpage 1`] = `
     <h1
       className="box-layout__title"
     >
-      BoilerPlateV2
+      Expensify
     </h1>
     <p>
-      Tagline for app
+      It's time to get your expenses under control.
     </p>
     <button
       className="button"

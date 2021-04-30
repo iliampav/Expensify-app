@@ -10,3 +10,14 @@ exports[`Should correct render the loading page 1`] = `
   />
 </div>
 `;
+
+exports[`Should load the loading page 1`] = `
+<div
+  className="loader"
+>
+  <img
+    className="loader__image"
+    src="/images/loader.gif"
+  />
+</div>
+`;
